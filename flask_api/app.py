@@ -34,7 +34,7 @@ def add_info():
 def update_info():
     try:
         data = json_data()
-        new_data = {'id':7,'name':'jinbei','email':'luffy@gmail.com'}
+        new_data = {'id':8,'name':'jinbei','email':'luffy@gmail.com'}
         for d in data:
             if new_data['id'] == d['id']:
                 return jsonify({'message': 'already exist'})
