@@ -33,5 +33,10 @@
         "id": 6,
         "name": "zoro",
         "email": "luffy@gmail.com"
+    },
+    {
+        "id": 7,
+        "name": "jinbei",
+        "email": "luffy@gmail.com"
     }
 ]

@@ -34,9 +34,10 @@ def add_info():
 def update_info():
     try:
         data = json_data()
-        new_data = {'id':6,'name':'zoro','email':'luffy@gmail.com'}
-        if new_data['id'] in data['id']:
-            return jsonify({'message': 'already exist'})
+        new_data = {'id':7,'name':'jinbei','email':'luffy@gmail.com'}
+        for d in data:
+            if new_data['id'] == d['id']:
+                return jsonify({'message': 'already exist'})
         data.append(new_data)
         with open(datas,'w') as f:
             json.dump(data,f,indent=4)
