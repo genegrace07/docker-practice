@@ -1,4 +1,4 @@
-from flask import Flask,abort,jsonify
+from flask import Flask,abort,jsonify,request
 import json
 
 app = Flask(__name__)
@@ -20,12 +20,21 @@ def view_data():
 @app.route('/addinfo',methods=['POST'])
 def add_info():
     try:
-        json_data()
-        new_data = [{'id':1,'name':'luffy','email':'luffy@gmail.com'},
-                    {'id':2,'name':'zoro','email':'zoro@gmail.com'},
-                    {'id':3,'name':'sanji','email':'sanji@gmail.com'}]
+        temp_data = []
+        # json_data()
+        # new_data = [{'id':1,'name':'luffy','email':'luffy@gmail.com'},
+        #             {'id':2,'name':'zoro','email':'zoro@gmail.com'},
+        #             {'id':3,'name':'sanji','email':'sanji@gmail.com'}]
+        with open(datas,'r') as f:
+            temp_data = json.load(f)
+        new_data = request.get_json()
+
+        if any(new_data['id'] == temp['id'] for temp in temp_data):
+            return jsonify({'message':'Already exist'})
+
+        temp_data.append(new_data)
         with open(datas,'w') as f:
-            json.dump(new_data,f,indent=4)
+            json.dump(temp_data,f,indent=4)
         return jsonify({'message':'Successfully added'})
 
     except FileNotFoundError:
@@ -34,12 +43,11 @@ def add_info():
 def update_info():
     try:
         temp_data = []
-        data = json_data()
 
-        with open(datas,'w') as f:
-            json.dump(temp_data,f)
+        with open(datas,'r') as f:
+            temp_data = json.load(f)
 
-        new_data = {'id':10,'name':'luffy2','email':'luffy2@gmail.com'}
+        new_data = {'id':10,'name':'brook','email':'brook@gmail.com'}
 
         for d in temp_data:
             if new_data['id'] == d['id']:
@@ -58,12 +66,12 @@ def delete_info():
         with open(datas,'r') as f:
             temp_data = json.load(f)
 
-        delete_data = {'id': 2, 'name': 'zoro', 'email': 'zoro@gmail.com'}
-
+        # delete_data = {'id': 2, 'name': 'zoro', 'email': 'zoro@gmail.com'}
+        delete_data = request.get_json()
         if_match = next(((n,temp) for n,temp in enumerate(temp_data) if delete_data['id'] == temp['id']),None)
         # for n,temp in enumerate(temp_data):
         if not if_match:
-            return 'Not found'
+            return jsonify({'message':'Not found'})
 
         del temp_data[if_match[0]]
         with open(datas,'w') as f:
