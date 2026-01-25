@@ -1,17 +1,17 @@
 [
     {
+        "id": 4,
+        "name": "sanji",
+        "email": "sanji@gmail.com"
+    },
+    {
         "id": 1,
         "name": "luffy",
         "email": "luffy@gmail.com"
     },
     {
-        "id": 4,
-        "name": "brook",
-        "email": "brook@gmail.com"
-    },
-    {
         "id": 2,
-        "name": "sanji",
-        "email": "sanji@gmail.com"
+        "name": "zoro",
+        "email": "zoro@gmail.com"
     }
 ]

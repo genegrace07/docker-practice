@@ -43,19 +43,22 @@ def add_info():
 def update_info():
     try:
         temp_data = []
-
         with open(datas,'r') as f:
             temp_data = json.load(f)
+        # update_data = {'id':10,'name':'brook','email':'brook@gmail.com'}
+        update_data = request.get_json()
 
-        new_data = {'id':10,'name':'brook','email':'brook@gmail.com'}
+        record = next((temp for temp in temp_data if update_data['id'] == temp['id']),None)
 
-        for d in temp_data:
-            if new_data['id'] == d['id']:
-                return jsonify({'message': 'already exist'})
-        temp_data.append(new_data)
-        with open(datas,'w') as f:
-            json.dump(temp_data,f,indent=4)
-        return jsonify({'message': 'Successfully added'})
+        if record is not None:
+            record['name'] = update_data.get('name', record['name'])
+            record['email'] = update_data.get('email', record['email'])
+
+            with open(datas,'w') as f:
+                json.dump(temp_data,f,indent=4)
+            return jsonify({'message': 'Successfully updated'})
+
+        return jsonify({'message': 'ID not found'}),404
 
     except FileNotFoundError:
         abort(404,description='json not found')
