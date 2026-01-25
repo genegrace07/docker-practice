@@ -33,15 +33,42 @@ def add_info():
 @app.route('/updateinfo',methods=['POST','GET'])
 def update_info():
     try:
+        temp_data = []
         data = json_data()
-        new_data = {'id':8,'name':'jinbei','email':'luffy@gmail.com'}
-        for d in data:
+
+        with open(datas,'w') as f:
+            json.dump(temp_data,f)
+
+        new_data = {'id':10,'name':'luffy2','email':'luffy2@gmail.com'}
+
+        for d in temp_data:
             if new_data['id'] == d['id']:
                 return jsonify({'message': 'already exist'})
-        data.append(new_data)
+        temp_data.append(new_data)
         with open(datas,'w') as f:
-            json.dump(data,f,indent=4)
+            json.dump(temp_data,f,indent=4)
         return jsonify({'message': 'Successfully added'})
+
+    except FileNotFoundError:
+        abort(404,description='json not found')
+@app.route('/deleteinfo',methods=['POST'])
+def delete_info():
+    try:
+        temp_data = []
+        with open(datas,'r') as f:
+            temp_data = json.load(f)
+
+        delete_data = {'id': 2, 'name': 'zoro', 'email': 'zoro@gmail.com'}
+
+        if_match = next(((n,temp) for n,temp in enumerate(temp_data) if delete_data['id'] == temp['id']),None)
+        # for n,temp in enumerate(temp_data):
+        if not if_match:
+            return 'Not found'
+
+        del temp_data[if_match[0]]
+        with open(datas,'w') as f:
+            json.dump(temp_data,f,indent=4)
+        return jsonify({'message': 'Successfully deleted'})
 
     except FileNotFoundError:
         abort(404,description='json not found')
